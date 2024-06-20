@@ -5,6 +5,7 @@ import heapq
 #librerías para la interfaz
 import tkinter as tk
 from tkinter import messagebox, Menu
+from tkinter import messagebox, simpledialog
 
 
 #Librerias para el grafo
@@ -121,17 +122,20 @@ class Interfaz:
         self.ventana=tk.Tk()
         self.ventana.title("WarnedRoute")
         self.opciones()
+        self.fondo()
 
     def opciones(self):
         frameOpciones=tk.Frame(self.ventana)
         frameOpciones.pack()
 
         boton_mostrar=tk.Button(frameOpciones,text="Mostrar el grafo",command=self.mostrar_grafo_interfaz)
-        boton_mostrar.pack(pady=20)
+        boton_mostrar.pack(padx=20,pady=20)
         
         boton_integrantes=tk.Button(frameOpciones,text="Integrantes Grupo:",command=self.mostrar_integrantes)
-        boton_integrantes.pack(pady=20)
+        boton_integrantes.pack(padx=20,pady=20)
 
+        boton_ruta_segura=tk.Button(frameOpciones,text="Ruta segura",command=self.ruta_segura)
+        boton_ruta_segura.pack(padx=20,pady=20)
         
 
    
@@ -143,18 +147,26 @@ class Interfaz:
     
     def mostrar_integrantes(self):
         messagebox.showinfo("Integrantes","Daniel Del Castillo\nGustavo Poma\nDiego Melendez")
+    
+    def fondo(self):
+        logo=tk.PhotoImage(file="fondo.png")
+        label=tk.Label(self.ventana, image=logo)
+        label.image = logo  # ¡Importante para evitar que la imagen se borre!
+        label.pack()
 
+        
     def ruta_segura(self):
         origen=self.obtenerOrigen()
         destino=self.obtenerDestino()
-        recorridoMinimo=2
+        recorridoMinimo=3
+        #Se coloca 3 para evitar este
 
         if origen and destino:
              grafo=cargar_datos('dataset.csv')
              ruta_segura=dijkstra(grafo,origen,destino,recorridoMinimo)
 
              if ruta_segura:
-                 messagebox.showinfo("Ruta segura","La ruta segura es: ",f"->".join(ruta_segura))
+                    messagebox.showinfo("Ruta segura", f"La ruta segura es: {' -> '.join(ruta_segura)}")
              else:
                  messagebox.showwarning("Ruta muy peligrosa,No se encontró una ruta estadisticamente segura para llegar a su destino")
         else:
